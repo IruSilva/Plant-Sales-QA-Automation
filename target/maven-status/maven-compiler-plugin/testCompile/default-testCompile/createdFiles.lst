@@ -1,9 +1,0 @@
-com\example\utils\ConfigReader.class
-com\example\ui\pages\categories\AddCategoryPage.class
-com\example\runners\CucumberRunner.class
-com\example\hooks\Hooks.class
-com\example\ui\stepDefinitions\categories\CategoryStepDefinitions.class
-com\example\api\stepDefinitions\PlantApiStepDefinitions.class
-com\example\ui\pages\login\LoginPage.class
-com\example\api\stepDefinitions\CategoryApiStepDefinitions.class
-com\example\ui\pages\categories\CategoryPage.class

@@ -1,11 +1,13 @@
 package com.example.hooks;
 
+import com.example.utils.ScenarioContext;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import io.github.bonigarcia.wdm.WebDriverManager;
+
 
 import java.util.HashMap;
 import java.util.Map;
@@ -50,10 +52,22 @@ public class Hooks {
     }
 
     // UPDATE: Added ("not @api") so we don't try to close a browser that never opened
-    @After("not @api")
-    public void tearDown() {
-        if (driver != null) {
-            driver.quit();
+   @After("not @api")
+public void tearDown() {
+    if (driver != null) {
+        try {
+            Thread.sleep(10000); // wait 10 seconds so you can see the UI
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
+
+        driver.quit();
     }
+}
+
+    @After
+public void clearScenarioContext() {
+    ScenarioContext.clear();
+}
+
 }

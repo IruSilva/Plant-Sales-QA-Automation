@@ -1,0 +1,20 @@
+# Maven build output
+target/
+
+# Test reports and generated results
+allure-results/
+allure-report/
+logs/
+
+# IDE files
+.idea/
+.vscode/
+*.iml
+
+# OS / local files
+.DS_Store
+Thumbs.db
+*.lnk
+
+# Screenshots if generated locally
+screenshots/

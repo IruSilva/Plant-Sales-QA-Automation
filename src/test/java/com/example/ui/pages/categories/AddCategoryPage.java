@@ -49,16 +49,13 @@ public class AddCategoryPage {
     }
 
     // --- NEW ACTION (For Test Case 3: Select Parent Category) ---
-    public void selectParentCategory(String parentName) {
-        // Wait for dropdown to be visible
-        wait.until(ExpectedConditions.visibilityOfElementLocated(parentDropdown));
-        
-        // Use Selenium's Select class for dropdowns
-        Select dropdown = new Select(driver.findElement(parentDropdown));
-        
-        // Select by visible text (e.g., "Fruits")
-        dropdown.selectByVisibleText(parentName);
-    }
+   public void selectParentCategory(String parentName) {
+    wait.until(ExpectedConditions.visibilityOfElementLocated(parentDropdown));
+    wait.until(ExpectedConditions.textToBePresentInElementLocated(parentDropdown, parentName));
+
+    Select dropdown = new Select(driver.findElement(parentDropdown));
+    dropdown.selectByVisibleText(parentName);
+}
 
     public void clickSave() {
         try {
@@ -159,4 +156,26 @@ public class AddCategoryPage {
             return "";
         }
     }
+
+public boolean isParentCategoryEmptyOptionAvailable() {
+    try {
+        wait.until(ExpectedConditions.visibilityOfElementLocated(parentDropdown));
+
+        Select dropdown = new Select(driver.findElement(parentDropdown));
+
+        for (org.openqa.selenium.WebElement option : dropdown.getOptions()) {
+            String value = option.getAttribute("value");
+            String text = option.getText().trim();
+
+            if ((value == null || value.trim().isEmpty()) && text.isEmpty()) {
+                return true;
+            }
+        }
+
+        return false;
+    } catch (Exception e) {
+        return false;
+    }
+}
+
 }

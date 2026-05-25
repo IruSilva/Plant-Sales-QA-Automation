@@ -8,6 +8,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.junit.Assert; 
 import java.time.Duration;
 
+
 public class CategoryPage {
     private WebDriver driver;
     private WebDriverWait wait;
@@ -316,4 +317,72 @@ public class CategoryPage {
         }
         return data;
     }
+
+
+    public void clickEditButtonForCategory(String categoryName) {
+        By editButton = By.xpath(
+                "//table/tbody/tr[td[contains(normalize-space(.), '" + categoryName + "')]]//a[contains(@href, 'edit')]"
+        );
+
+        wait.until(ExpectedConditions.elementToBeClickable(editButton)).click();
+    }
+
+
+            public String getFirstCategoryNameFromTable() {
+    By firstNameCell = By.xpath("//table/tbody/tr[1]/td[2]");
+
+    try {
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(firstNameCell)).getText().trim();
+    } catch (Exception e) {
+        return null;
+    }
+}
+
+public String selectFirstAvailableSearchParentCategory() {
+    try {
+        wait.until(ExpectedConditions.visibilityOfElementLocated(searchParentDropdown));
+
+        org.openqa.selenium.support.ui.Select dropdown =
+                new org.openqa.selenium.support.ui.Select(driver.findElement(searchParentDropdown));
+
+        for (org.openqa.selenium.WebElement option : dropdown.getOptions()) {
+            String text = option.getText().trim();
+
+            if (!text.isEmpty() && !text.equalsIgnoreCase("All Parents")) {
+                dropdown.selectByVisibleText(text);
+                return text;
+            }
+        }
+
+        return null;
+    } catch (Exception e) {
+        return null;
+    }
+}
+
+public void clickLogout() {
+    try {
+        By logoutLink = By.linkText("Logout");
+        wait.until(ExpectedConditions.elementToBeClickable(logoutLink)).click();
+    } catch (Exception e) {
+        try {
+            By logoutHref = By.cssSelector("a[href*='logout']");
+            wait.until(ExpectedConditions.elementToBeClickable(logoutHref)).click();
+        } catch (Exception ex) {
+            driver.get(com.example.utils.ConfigReader.get("base.url") + "/logout");
+        }
+    }
+}
+
+        public void waitForCategoryPageToLoad() {
+    wait.until(ExpectedConditions.visibilityOfElementLocated(categoryTable));
+}
+
+public void waitForTableRefresh() {
+    wait.until(ExpectedConditions.visibilityOfElementLocated(categoryTable));
+}
+
+public void waitForSearchInput() {
+    wait.until(ExpectedConditions.visibilityOfElementLocated(searchInput));
+}
 }
