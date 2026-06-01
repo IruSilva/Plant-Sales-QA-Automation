@@ -1,26 +1,161 @@
-Plant Sales UI Automation Framework
-This project contains automated UI and API test scenarios for the QA Training Plant Sales application. The framework uses Java, Selenium WebDriver, Cucumber BDD, TestNG, Maven, Page Object Model, and dynamic test data utilities.
-Project Enhancement Summary
-The category automation module was enhanced to make the framework more professional, maintainable, and reliable.
-Main Improvements Completed
-Removed hardcoded category names from UI category scenarios.
-Replaced fixed test data such as `Lotus`, `Coconut`, `Rose SL`, `Catcus`, and `XYZ_Invalid` with generated or dynamically selected test data.
-Introduced generated data keys in feature files, such as:
-`UI_MAIN_CATEGORY`
-`UI_PARENT_CATEGORY`
-`UI_SUB_CATEGORY`
-`UI_MULTI_WORD_CATEGORY`
-`USER_FILTER_PARENT_CATEGORY`
-`USER_FILTER_SUB_CATEGORY`
-Used `ScenarioContext` to store generated values during scenario execution and reuse them in later steps.
-Used `TestDataGenerator` to create unique category names and avoid duplicate data failures.
-Converted user category search and filter scenarios to dynamic data-driven behavior.
-Added setup flow where Admin creates required category data, then Standard User verifies search/filter behavior.
-Separated known application bugs using the `@known_bug` tag.
-Replaced many fixed waits in step definitions with Page Object wait methods.
-Split sorting validation into separate test cases for ID, Category Name, and Parent Category.
-Added ascending and descending sorting verification for supported columns.
-Framework Structure
+# Plant Sales UI Automation Framework
+
+This repository contains an automated testing framework for the **QA Training Plant Sales** web application. The project focuses on validating the **Category Management** module using UI automation and behavior-driven test scenarios.
+
+The framework is developed using **Java**, **Selenium WebDriver**, **Cucumber BDD**, **TestNG**, and **Maven**, with a maintainable structure based on the **Page Object Model**.
+
+---
+
+## Project Overview
+
+The main purpose of this project is to automate important category management workflows in the Plant Sales application. The automated scenarios cover both **Admin** and **Standard User** behavior to verify that the module works correctly for different user roles.
+
+The project demonstrates:
+
+- UI automation using Selenium WebDriver
+- BDD scenario writing using Cucumber feature files
+- Test execution using TestNG and Maven
+- Page Object Model implementation
+- Role-based test coverage for Admin and Standard User workflows
+- Data-driven test execution using generated and reusable test data
+- Scenario-level data sharing using ScenarioContext
+- Clean test execution using Cucumber tags
+- Logging and reporting support
+
+---
+
+## Tech Stack
+
+| Area | Technology |
+|---|---|
+| Programming Language | Java |
+| UI Automation | Selenium WebDriver |
+| BDD Framework | Cucumber |
+| Test Runner | TestNG |
+| Build Tool | Maven |
+| API Testing Support | Rest Assured |
+| Driver Management | WebDriverManager |
+| Reporting Support | Extent Reports, Allure |
+| Logging | Log4j2 |
+| Design Pattern | Page Object Model |
+
+---
+
+## Module Covered
+
+### Category Management
+
+The automated test coverage focuses on the Category Management module of the Plant Sales application.
+
+Covered areas include:
+
+- Admin category creation
+- Main category creation
+- Sub-category creation
+- Required field validation
+- Category search
+- Parent category filtering
+- Standard User category access
+- Standard User search and filtering
+- Sorting validation
+- Negative test scenarios
+
+---
+
+## Key Features Implemented
+
+### 1. Page Object Model Structure
+
+The framework follows the Page Object Model design pattern. Page-level actions and locators are separated from step definitions to improve readability, reusability, and maintainability.
+
+This makes the test code easier to update when UI behavior changes.
+
+---
+
+### 2. Cucumber BDD Scenarios
+
+Test cases are written in Gherkin syntax, making them readable for both technical and non-technical users.
+
+Example:
+
+```gherkin
+Scenario: Verify Admin can successfully add a new Main Category
+  Given the user is on the login page
+  When the user logs in with valid credentials
+  Then the user is on the Category Management page
+  When the user clicks the "Add A Category" button
+  And the user enters a category name in the Category Name field
+  And the user clicks the Save button
+  Then a success message should be displayed
+```
+
+---
+
+### 3. Role-Based Test Coverage
+
+The framework includes separate workflows for:
+
+- **Admin users** who can manage categories
+- **Standard users** who can view, search, filter, and sort category records
+
+This helps validate the application behavior according to user permissions.
+
+---
+
+### 4. Dynamic and Reusable Test Data
+
+The framework supports generated test data for category scenarios. Generated values are stored during test execution and reused in later steps when needed.
+
+Example generated data keys:
+
+```text
+UI_MAIN_CATEGORY
+UI_PARENT_CATEGORY
+UI_SUB_CATEGORY
+UI_MULTI_WORD_CATEGORY
+USER_FILTER_PARENT_CATEGORY
+USER_FILTER_SUB_CATEGORY
+```
+
+This approach helps reduce dependency on fixed database records and supports more reliable regression execution.
+
+---
+
+### 5. ScenarioContext Usage
+
+`ScenarioContext` is used to store values generated during a scenario and reuse them across different step definitions.
+
+Example usage:
+
+```text
+Generated category name -> Stored in ScenarioContext -> Used later for validation
+```
+
+This helps maintain continuity between test setup, action, and verification steps.
+
+---
+
+### 6. TestDataGenerator Utility
+
+`TestDataGenerator` is used to create unique test data during runtime. This helps avoid duplicate-data issues and makes the automated tests more suitable for repeated execution.
+
+---
+
+### 7. Tag-Based Test Execution
+
+Cucumber tags are used to run selected groups of tests.
+
+| Tag | Purpose |
+|---|---|
+| `@smoke` | Runs critical high-level test scenarios |
+| `@regression` | Runs regression test scenarios |
+| `@tc01`, `@tc02`, etc. | Runs a specific Admin category test case |
+| `@tc_user_01`, `@tc_user_02`, etc. | Runs a specific Standard User category test case |
+
+---
+
+## Project Structure
+
 ```text
 src/test/java/com/example
 ├── hooks
@@ -51,147 +186,158 @@ src/test/resources
 ├── config.properties
 └── testng.xml
 ```
-Data-Driven Testing Approach
-The framework no longer depends on static category names for most category scenarios. Instead, the test creates or reads data dynamically during execution.
-Example: Generated Category Name
-Feature file step:
-```gherkin
-And the user enters generated category name "UI_MAIN_CATEGORY" in the Category Name field
-Then the generated category "UI_MAIN_CATEGORY" should appear in the list
-```
-Runtime behavior:
+
+---
+
+## Test Scenarios
+
+### Admin Category Scenarios
+
+| Test Case | Scenario |
+|---|---|
+| TC_UI_ADMIN_CAT_01 | Verify Admin can successfully add a new main category |
+| TC_UI_ADMIN_CAT_02 | Verify Admin is prevented from creating a category with an empty name |
+| TC_UI_ADMIN_CAT_03 | Verify Admin can successfully create a new sub-category |
+| TC_UI_ADMIN_CAT_04 | Verify category search using multi-word category names |
+| TC_UI_ADMIN_CAT_05 | Verify duplicate category name validation during update |
+| TC_UI_ADMIN_CAT_06 | Verify category creation behavior with parent category selection |
+
+### Standard User Category Scenarios
+
+| Test Case | Scenario |
+|---|---|
+| TC_UI_USER_CAT_01 | Verify category management restrictions for non-admin users |
+| TC_UI_USER_CAT_02 | Verify Standard User can search for an existing category |
+| TC_UI_USER_CAT_03 | Verify Standard User can filter categories by parent category |
+| TC_UI_USER_CAT_04 | Verify proper feedback for non-existing category search |
+| TC_UI_USER_CAT_05A | Verify Standard User can sort categories by ID |
+| TC_UI_USER_CAT_05B | Verify Standard User can sort categories by category name |
+| TC_UI_USER_CAT_05C | Verify Standard User can sort categories by parent category |
+
+---
+
+## Prerequisites
+
+Before running the automation framework, make sure the following are installed:
+
+- Java JDK
+- Maven
+- Google Chrome browser
+- Git
+- Plant Sales application running locally
+
+The application base URL is configured in:
+
 ```text
-UI_MAIN_CATEGORY = UIC123456
+src/test/resources/config.properties
 ```
-The generated category name is stored in `ScenarioContext`, so later steps can reuse the same value.
-Example: Standard User Search
-Instead of searching for a hardcoded category such as `Lotus`, the test reads an existing category from the table and searches for that value.
-```gherkin
-When the user enters existing category name from the list in the search box
-Then the category list should display the searched category record
+
+Default local URL:
+
+```text
+http://localhost:8080
 ```
-This makes the test independent from old database records.
-Example: Standard User Parent Filter
-For parent filtering, the test now creates data using Admin first, then verifies filtering as Standard User.
-```gherkin
-Given an admin creates generated parent category "USER_FILTER_PARENT_CATEGORY"
-And an admin creates generated sub category "USER_FILTER_SUB_CATEGORY" under parent "USER_FILTER_PARENT_CATEGORY"
-And the standard user logs in after admin setup
-When the user selects generated category "USER_FILTER_PARENT_CATEGORY" from the search parent dropdown
-Then the generated category "USER_FILTER_SUB_CATEGORY" should appear in the list
+
+---
+
+## Configuration
+
+The main execution settings are managed in `config.properties`.
+
+Example configuration areas:
+
+```properties
+base.url=http://localhost:8080
+login.url=http://localhost:8080/ui/login
+browser=chrome
+headless=false
+implicit.wait=10
+page.load.timeout=30
+explicit.wait=20
+screenshot.on.failure=true
 ```
-This approach prevents failures in fresh databases where no suitable parent/sub-category records exist.
-Tags Used
-Tag	Purpose
-`@smoke`	Runs critical high-level tests only
-`@regression`	Runs regression test scenarios
-`@known_bug`	Marks valid tests that currently fail because of known application defects
-`@tc01`, `@tc02`, etc.	Runs a specific admin category test
-`@tc_user_01`, `@tc_user_02`, etc.	Runs a specific standard user category test
-How to Run Tests
-Run one test case
+
+User credentials and test data are also maintained through the configuration file to keep the framework easy to update.
+
+---
+
+## How to Run the Tests
+
+### Run all tests
+
 ```powershell
-mvn test "-Dcucumber.filter.tags=@tc01"
+mvn test
 ```
-```powershell
-mvn test "-Dcucumber.filter.tags=@tc_user_02"
-```
-Run smoke tests
+
+### Run smoke tests
+
 ```powershell
 mvn test "-Dcucumber.filter.tags=@smoke"
 ```
-Run all regression tests
+
+### Run regression tests
+
 ```powershell
 mvn test "-Dcucumber.filter.tags=@regression"
 ```
-Run clean regression excluding known bugs
+
+### Run a specific Admin test case
+
 ```powershell
-mvn test "-Dcucumber.filter.tags=@regression and not @known_bug"
+mvn test "-Dcucumber.filter.tags=@tc01"
 ```
-This is the recommended command for final stable execution.
-Category UI Test Status
-Admin Category Tests
-Test Case	Description	Status
-`TC_UI_ADMIN_CAT_01`	Admin can create a generated main category	Passed
-`TC_UI_ADMIN_CAT_02`	Admin cannot create category with empty name	Passed
-`TC_UI_ADMIN_CAT_03`	Admin can create generated sub-category under generated parent	Passed
-`TC_UI_ADMIN_CAT_04`	Multi-word category search	Known Bug
-`TC_UI_ADMIN_CAT_05`	Duplicate sub-category rename validation	Known Bug
-`TC_UI_ADMIN_CAT_06`	Parent dropdown should allow empty selection	Known Bug
-Standard User Category Tests
-Test Case	Description	Status
-`TC_UI_USER_CAT_01`	Standard User should not access Edit Category page	Known Bug
-`TC_UI_USER_CAT_02`	Standard User can search existing category dynamically	Passed
-`TC_UI_USER_CAT_03`	Standard User can filter by generated parent category	Passed
-`TC_UI_USER_CAT_04`	Standard User sees “No category found” for generated invalid search	Passed
-`TC_UI_USER_CAT_05A`	Standard User can sort by ID ascending and descending	Passed
-`TC_UI_USER_CAT_05B`	Standard User can sort by Category Name descending and ascending	Passed
-`TC_UI_USER_CAT_05C`	Parent Category sorting	Known Bug
-Known Bugs
-`BUG_ADMIN_UI_CAT_002`
-Parent Category dropdown prevents empty selection, although the SRS states that Parent Category selection is optional and empty parent selection should create a main category.
-Related scenario:
-```text
-@tc06 @known_bug
-```
-`BUG_ADMIN_UI_CAT_003`
-Search filter returns “No category found” when searching for valid multi-word category names.
-Related scenario:
-```text
-@tc04 @known_bug
-```
-Duplicate Category Rename Error
-When renaming a sub-category to an existing name, the UI displays a raw backend `500 INTERNAL_SERVER_ERROR` instead of a user-friendly validation message.
-Related scenario:
-```text
-@tc05 @known_bug
-```
-`BUG_USER_UI_CAT_001`
-Edit button is visible to non-admin users and allows access to the Edit Category page.
-Related scenario:
-```text
-@tc_user_01 @known_bug
-```
-`BUG_USER_UI_CAT_003`
-Parent Category column sorting is non-functional.
-Related scenario:
-```text
-@tc_user_05c @known_bug
-```
-Locator Improvement Notes
-The current framework is functional and the clean regression passes. However, some locators still use absolute XPath values such as:
-```java
-/html/body/div[1]/div/div[2]/div[2]/table
-```
-For future maintainability, these should be gradually replaced with more stable locators such as:
-```java
-By.cssSelector("table")
-By.cssSelector("a[href='/ui/categories/add']")
-By.id("name")
-By.id("parentId")
-By.xpath("//button[contains(normalize-space(), 'Save')]")
-```
-Recommended locator priority:
-```text
-1. id
-2. name
-3. stable CSS selector
-4. link text
-5. relative XPath
-6. absolute XPath only as last option
-```
-Final Regression Result
-The clean regression suite passed using:
+
+### Run a specific Standard User test case
+
 ```powershell
-mvn test "-Dcucumber.filter.tags=@regression and not @known_bug"
+mvn test "-Dcucumber.filter.tags=@tc_user_02"
 ```
-This confirms that stable scenarios pass while known application defects are excluded using the `@known_bug` tag.
-Notes for Visual Execution
-The browser is visible because `headless=false` is configured in `config.properties`.
-For screen recording or demo purposes, a temporary wait may be kept in `Hooks.java` before `driver.quit()`.
-For final clean automation, remove the temporary wait and keep:
-```java
-if (driver != null) {
-    driver.quit();
-}
+
+---
+
+## Reporting and Logs
+
+The framework includes reporting and logging support to make test execution easier to review.
+
+Supported reporting and logging areas include:
+
+- Console logs
+- Log file generation
+- Screenshot capture on failure
+- Extent Reports support
+- Allure reporting support
+
+Log configuration is maintained using `log4j2.xml`.
+
+---
+
+## Demo Execution
+
+For demonstration purposes, the browser can run in visible mode using:
+
+```properties
+headless=false
 ```
+
+This allows the test execution flow to be recorded or presented clearly during a project demonstration.
+
+---
+
+## Project Highlights
+
+This project showcases practical QA automation skills, including:
+
+- Translating SRS-based test cases into automated BDD scenarios
+- Automating role-based UI workflows
+- Designing reusable Page Object classes
+- Managing dynamic test data
+- Using Maven commands for controlled test execution
+- Organizing tests with Cucumber tags
+- Validating both positive and negative scenarios
+- Maintaining a clean and understandable automation framework structure
+
+---
+
+## Repository Purpose
+
+This repository is created as a QA automation project to demonstrate the implementation of automated UI test scenarios for the Plant Sales application. It highlights practical automation concepts used in real-world QA work, including maintainability, reusability, role-based validation, and regression test execution.
